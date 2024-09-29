@@ -7,6 +7,7 @@ from schemas.Schemas import UserCreate, UserLogin , RegisterResponse, LoginRespo
 from sqlalchemy.exc import IntegrityError
 from models.Models import User  # Your SQLAlchemy model
 from sqlalchemy import text
+from auth.utils import hash_password
 
 from seeding import seed_roles
 
@@ -50,8 +51,8 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         username=user.username,
         email=user.email,
-        # password=hash_password(user.password),  # Hash the password
-        password=user.password,  # For testing purposes
+        password=hash_password(user.password),  # Hash the password
+        # password=user.password,  # For testing purposes
         role_id=user.role_id  # Use provided role_id or default logic if needed
     )
     
@@ -68,9 +69,11 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 async def login_user(user: UserLogin, db: Session = Depends(get_db)):
     # Logic for hashing the password, checking existing users, etc.
     try:
-        user = db.query(User).filter(User.username == user.username).first()
+        db_user = db.query(User).filter(User.username == user.username).first()
         if user:
-            return {"msg": "User logged in successfully", "user": user}
+            if user.password == db_user.password:
+                return {"msg": "User logged in successfully", "user": db_user}
+            return {"msg": "Invalid password", "user": db_user}
         else:
             raise HTTPException(status_code=400, detail="User not found.")
     except Exception as e:
