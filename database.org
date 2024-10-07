@@ -1,0 +1,53 @@
+#+title: Database
+
+* Student
+** Auth id(foreign key)
+** Roll no (int primary key)
+** Student Name (string)
+** Department (string)
+
+* Appointments
+** Appointmetn id (int primary key auto)
+** Description (string)
+** Student id (foreign key)
+** Time (int)
+** Last Updated by (foreign key receptionist id)
+
+* Events
+** Id (int auto primary key)
+** Appointment id ( foreign key )
+** Category( foreign key )
+** Machinist id (foreign key)
+** Doctor id (foreign key)
+** Result (precription/report) (string)
+** Status (string)
+** Time (string)
+
+* Type
+** Category (primary key unique)
+** Role Id (unique)
+
+* Machinist
+** Auth id(foreign key)
+** Id (int primary key auto)
+** Category (string)
+** Name (string)
+
+* Doctor
+** Id (int primary key auto)
+** Auth id(foreign key)
+** Name (string)
+** Speciality(string)
+** Qualifications(string)
+** Shift Timing (string)
+
+* Receptionist
+** Id (int primary key auto)
+** Auth id(foreign key)
+** Name (string)
+
+* Auth
+** Id (primary key)
+** Email/username (string unique)
+** passowrd (string)
+** Role id (int)
