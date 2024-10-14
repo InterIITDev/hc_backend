@@ -3,12 +3,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from pydantic import BaseModel
 from db import get_engine
-from models import Auth
+from models import Auth, Patient
 router = APIRouter()
 
 class NewUser(BaseModel):
     username: str
-    name: str | None
+    name: str
     password: str
     role_id: int
 
@@ -27,6 +27,9 @@ def create_user(new_user:NewUser):
     engine = get_engine()
     with Session(engine) as session:
         session.add(user)
+        if new_user.role_id==1:
+            patient = Patient(username=new_user.username,name=new_user.name)
+            session.add(patient)
         session.commit()
     return status.HTTP_201_CREATED
 
