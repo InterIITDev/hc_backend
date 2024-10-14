@@ -4,7 +4,7 @@ from user.auth import router
 
 setup_db()
 app = FastAPI()
-app.include_router(router,prefix="/auth")
+app.include_router(router,prefix="/user")
 
 
 @app.post("/")
