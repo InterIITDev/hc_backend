@@ -29,11 +29,12 @@ def get_appointment(id:int):
 
 
 class UpdateAppointment(BaseModel):
-    doctor_id: str | None
-    desc: str | None
+    doctor_id: str | None = None
+    desc: str | None = None
 
 @router.put("/{id}")
 def update_appointment(id:int,updates:UpdateAppointment):
+    # Add Check
     stmt = select(Appointments).where(Appointments.id==id)
     engine = get_engine()
     with Session(engine) as session:
