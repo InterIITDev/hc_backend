@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from pydantic import BaseModel
 from db import get_engine
-from models import Auth, Patient
+from models import Auth, Doctor, Machinist, Patient, Receptionist
 router = APIRouter()
 
 class NewUser(BaseModel):
@@ -11,6 +11,10 @@ class NewUser(BaseModel):
     name: str
     password: str
     role_id: int
+    speciality: str |None = None
+    qualifications: str|None = None
+    shift_timings: str|None = None
+    category: str|None = None
 
 class UserLogin(BaseModel):
     username: str
@@ -30,6 +34,15 @@ def create_user(new_user:NewUser):
         if new_user.role_id==1:
             patient = Patient(username=new_user.username,name=new_user.name)
             session.add(patient)
+        if new_user.role_id==2:
+            doctor = Doctor(username=new_user.username,speciality=new_user.speciality,qualifications=new_user.qualifications,shift_timing=new_user.shift_timings)
+            session.add(doctor)
+        if new_user.role_id==3:
+            machinist = Machinist(username=new_user.username,category=new_user.category)
+            session.add(machinist)
+        if new_user.role_id==4:
+            receptionist = Receptionist(username=new_user.username)
+            session.add(receptionist)
         session.commit()
     return status.HTTP_201_CREATED
 
