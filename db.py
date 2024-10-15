@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 from models import Base
 import os
@@ -15,7 +14,6 @@ def get_engine():
 def setup_db():
     global engine
     engine = get_engine()
-    session = Session(engine,autocommit=False)
     Base.metadata.create_all(engine)
 
 
